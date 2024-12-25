@@ -14,6 +14,7 @@ const UserSchema=mongoose.Schema({
         maxlength:50
     },
     email:{
+        unique:true,
         type:String,
         required:[true,"Please provide the email field"],
         validate:{
