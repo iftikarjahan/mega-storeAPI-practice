@@ -5,6 +5,7 @@ of users
 
 const mongoose=require("mongoose");
 const validator=require("validator");
+const bcrypt=require("bcrypt");
 
 const UserSchema=mongoose.Schema({
     name:{
@@ -32,6 +33,12 @@ const UserSchema=mongoose.Schema({
         enum:["user","admin"],
         default:"user"
     }
+})
+
+UserSchema.pre("save",async function(){
+    const salt=await bcrypt.genSalt(10);
+    const hashedPassword=await bcrypt.hash(this.password,salt);
+    this.password=hashedPassword;
 })
 
 module.exports=mongoose.model("User",UserSchema);
