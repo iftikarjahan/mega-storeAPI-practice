@@ -7,7 +7,9 @@ const notFoundMiddleware=require("./middleware/not-found");
 const errorHandlingMiddleware=require("./middleware/error-handler");
 require("express-async-errors");
 const morgan=require("morgan");
+const cookieParser = require("cookie-parser");
 
+app.use(cookieParser());    //for parsing the cookies from the request
 app.use(express.json())
 
 
