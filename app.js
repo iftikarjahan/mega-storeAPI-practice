@@ -14,7 +14,10 @@ app.use(cookieParser(process.env.JWT_SECRET_KEY));    //for parsing the cookies 
 app.use(express.json())
 
 app.use("/error-test", (req, res, next) => {
-    throw new UnauthenticatedError("Test error🚩🚩🚩🚩"); // Synchronous error
+    console.log(req.signedCookies);
+    
+    res.send("Testing Testing")
+    // throw new UnauthenticatedError("Test error🚩🚩🚩🚩"); // Synchronous error
 });
 
 
