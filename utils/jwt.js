@@ -26,7 +26,13 @@ const attachJWTtoCookie=({res,tokenPayload})=>{
       });
 }
 
+const verifyJWT=({token})=>{
+    const decodedPayload=jwt.verify(token,process.env.JWT_SECRET_KEY);
+    return decodedPayload;
+}
+
 module.exports={
     createJWT,
-    attachJWTtoCookie
+    attachJWTtoCookie,
+    verifyJWT
 }

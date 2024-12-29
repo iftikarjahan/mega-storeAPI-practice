@@ -4,6 +4,8 @@ const StatusCodes = require("http-status-codes");
 const {NotFoundError}=require("../errors");
 
 const getAllUsers = async (req, res, next) => {
+    //console.log(req.user);  //you can access the user once you have done the authentication
+    
   //only allowed by the admin
   const users = await User.find({ role: "user" }).select("-password");
   res.status(StatusCodes.OK).json({ users });

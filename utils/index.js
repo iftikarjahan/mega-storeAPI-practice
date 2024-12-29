@@ -1,6 +1,7 @@
-const{createJWT,attachJWTtoCookie}=require("./jwt");
+const{createJWT,attachJWTtoCookie,verifyJWT}=require("./jwt");
 
 module.exports={
     createJWT,
-    attachJWTtoCookie
+    attachJWTtoCookie,
+    verifyJWT
 }

@@ -14,12 +14,7 @@ const {CustomAPIError,UnauthenticatedError}=require("./errors");
 app.use(cookieParser(process.env.JWT_SECRET_KEY));    //for parsing the cookies from the request
 app.use(express.json())
 
-app.use("/error-test", (req, res, next) => {
-    console.log(req.signedCookies);
-    
-    res.send("Testing Testing")
-    // throw new UnauthenticatedError("Test error🚩🚩🚩🚩"); // Synchronous error
-});
+
 
 
 
@@ -30,6 +25,12 @@ app.get("/",(req,res,next)=>{
 app.use("/api/v1/auth",authRouter);
 app.use("/api/v1/users",userRoutes);
 
+app.use("/error-test", (req, res, next) => {
+    // console.log(req);
+    
+    res.send("Testing Testing")
+    // throw new UnauthenticatedError("Test error🚩🚩🚩🚩"); // Synchronous error
+});
 
 app.use(notFoundMiddleware);
 app.use(errorHandlingMiddleware);
