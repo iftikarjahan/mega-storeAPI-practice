@@ -4,6 +4,7 @@ const app=express();
 const connectDb=require("./db/connect");
 require("dotenv").config();
 const authRouter=require("./routes/authRoutes");
+const userRoutes=require("./routes/userRoutes");
 const notFoundMiddleware=require("./middleware/not-found");
 const errorHandlingMiddleware=require("./middleware/error-handler");
 const morgan=require("morgan");
@@ -27,6 +28,7 @@ app.get("/",(req,res,next)=>{
 })
 
 app.use("/api/v1/auth",authRouter);
+app.use("/api/v1/users",userRoutes);
 
 
 app.use(notFoundMiddleware);
