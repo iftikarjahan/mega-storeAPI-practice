@@ -20,7 +20,7 @@ const UserSchema=mongoose.Schema({
         required:[true,"Please provide the email field"],
         validate:{
             validator:validator.isEmail,
-            message:props=>`${props.email} is not a valid email.`
+            message:props=>`${props.value} is not a valid email.`
         }
     },
     password:{
@@ -35,10 +35,16 @@ const UserSchema=mongoose.Schema({
     }
 })
 
-UserSchema.pre("save",async function(){
+UserSchema.pre("save",async function(next){
     const salt=await bcrypt.genSalt(10);
     const hashedPassword=await bcrypt.hash(this.password,salt);
     this.password=hashedPassword;
+    next();
 })
+
+UserSchema.methods.comparePassword=async function(enteredPassword){
+    const passwordIsCorrect=await bcrypt.compare(enteredPassword,this.password);
+    return passwordIsCorrect;
+}
 
 module.exports=mongoose.model("User",UserSchema);

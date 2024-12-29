@@ -22,6 +22,7 @@ const attachJWTtoCookie=({res,tokenPayload})=>{
       res.cookie("myToken", token, {
         httpOnly: true,
         maxAge: 360000, //1hr
+        signed:true
       });
 }
 
