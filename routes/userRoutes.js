@@ -12,9 +12,9 @@ FLOW
     2.Then the user would be authorized for specific permissions using the authorization middleware
 */ 
 
-router.route("/").get(authMiddleware,authorizationMiddleware("admin","user"),userControllers.getAllUsers);
+router.route("/").get(authMiddleware,authorizationMiddleware("admin"),userControllers.getAllUsers);
 router.route("/showCurrentUser").get(authMiddleware,userControllers.getCurrentUser);
-router.route("/updateUser").patch(userControllers.updateUser);
+router.route("/updateUser").patch(authMiddleware,userControllers.updateUser);
 router.route("/updateUserPassword").patch(authMiddleware,userControllers.updateUserPassword);
 
 // note that this route should be at the bottom

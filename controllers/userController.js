@@ -6,6 +6,7 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require("../errors");
+const { generateTokenPayload, attachJWTtoCookie } = require("../utils");
 
 const getAllUsers = async (req, res, next) => {
   //console.log(req.user);  //you can access the user once you have done the authentication
@@ -27,8 +28,28 @@ const getCurrentUser = (req, res, next) => {
   res.status(StatusCodes.OK).json({ user: req.user });
 };
 
-const updateUser = (req, res, next) => {
-  res.send("Update User");
+const updateUser = async (req, res, next) => {
+  const { name, email } = req.body;
+  if (!name || !email) {
+    throw new BadRequestError("Please provide both the name and email fields");
+  }
+//   console.log(req.user.id);
+  /*
+        ->Its not only enough to update the database. You would also need to update the cookie 
+    */
+  const updatedUser = await User.findOneAndUpdate(
+    { _id: req.user.id },
+    { name, email },
+    { new: true, runValidators: true }
+  );
+  const tokenPayload = generateTokenPayload(updatedUser);
+  console.log(updatedUser);
+  console.log(tokenPayload);
+  
+  
+  attachJWTtoCookie({res, tokenPayload}); //this would update the jwt token also
+
+  res.status(StatusCodes.OK).json({ user: tokenPayload });
 };
 
 const updateUserPassword = async (req, res, next) => {
