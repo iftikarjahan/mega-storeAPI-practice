@@ -15,7 +15,7 @@ FLOW
 router.route("/").get(authMiddleware,authorizationMiddleware("admin","user"),userControllers.getAllUsers);
 router.route("/showCurrentUser").get(authMiddleware,userControllers.getCurrentUser);
 router.route("/updateUser").patch(userControllers.updateUser);
-router.route("/updateUserPassword").patch(userControllers.updateUserPassword);
+router.route("/updateUserPassword").patch(authMiddleware,userControllers.updateUserPassword);
 
 // note that this route should be at the bottom
 router.route("/:id").get(authMiddleware,userControllers.getSingleUser);
