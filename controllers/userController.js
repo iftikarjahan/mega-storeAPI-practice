@@ -20,8 +20,9 @@ const getSingleUser = async (req, res, next) => {
 };
 
 const getCurrentUser = (req, res, next) => {
-  res.send("Get Current User");
+  res.status(StatusCodes.OK).json({user:req.user});
 };
+
 
 const updateUser = (req, res, next) => {
   res.send("Update User");

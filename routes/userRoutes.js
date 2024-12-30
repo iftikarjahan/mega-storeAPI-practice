@@ -13,7 +13,7 @@ FLOW
 */ 
 
 router.route("/").get(authMiddleware,authorizationMiddleware("admin","user"),userControllers.getAllUsers);
-router.route("/showCurrentUser").get(userControllers.getCurrentUser);
+router.route("/showCurrentUser").get(authMiddleware,userControllers.getCurrentUser);
 router.route("/updateUser").patch(userControllers.updateUser);
 router.route("/updateUserPassword").patch(userControllers.updateUserPassword);
 
