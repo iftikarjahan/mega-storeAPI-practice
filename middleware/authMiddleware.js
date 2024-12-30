@@ -16,8 +16,6 @@ const authMiddleware=(req,res,next)=>{
     try {
         const decodedPayload=verifyJWT({token});
         req.user={...decodedPayload};
-        console.log("ccc");
-        
         next();
     } catch (error) {
         throw new UnauthenticatedError("Authentication failed....please login and try again");
