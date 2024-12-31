@@ -6,7 +6,11 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require("../errors");
-const { generateTokenPayload, attachJWTtoCookie } = require("../utils");
+const {
+  generateTokenPayload,
+  attachJWTtoCookie,
+  checkPermission,
+} = require("../utils");
 
 const getAllUsers = async (req, res, next) => {
   //console.log(req.user);  //you can access the user once you have done the authentication
@@ -17,10 +21,21 @@ const getAllUsers = async (req, res, next) => {
 };
 
 const getSingleUser = async (req, res, next) => {
+  /*
+    ->This is only a feature that should only be accessed by special users. For that you 
+    need to add a checking function
+    */
+
   const user = await User.findOne({ _id: req.params.id }).select("-password");
   if (!user) {
     throw new NotFoundError(`User Not Found wwith the id: ${req.params.id}`);
   }
+  /*
+->If I get the user, I need to check if I am really allowed to access the user data or not
+->You can only access the data as an admin 
+->Or you can only get the data of yourself
+*/
+  checkPermission(req.user, user._id);
   res.status(StatusCodes.OK).json({ user });
 };
 
@@ -33,7 +48,7 @@ const updateUser = async (req, res, next) => {
   if (!name || !email) {
     throw new BadRequestError("Please provide both the name and email fields");
   }
-//   console.log(req.user.id);
+  //   console.log(req.user.id);
   /*
         ->Its not only enough to update the database. You would also need to update the cookie 
     */
@@ -45,9 +60,8 @@ const updateUser = async (req, res, next) => {
   const tokenPayload = generateTokenPayload(updatedUser);
   console.log(updatedUser);
   console.log(tokenPayload);
-  
-  
-  attachJWTtoCookie({res, tokenPayload}); //this would update the jwt token also
+
+  attachJWTtoCookie({ res, tokenPayload }); //this would update the jwt token also
 
   res.status(StatusCodes.OK).json({ user: tokenPayload });
 };
