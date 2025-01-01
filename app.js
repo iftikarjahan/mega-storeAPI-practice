@@ -3,8 +3,12 @@ require('express-async-errors');
 const app=express();
 const connectDb=require("./db/connect");
 require("dotenv").config();
+
+// routes
 const authRouter=require("./routes/authRoutes");
 const userRoutes=require("./routes/userRoutes");
+const productRoutes=require("./routes/productRoutes");
+
 const notFoundMiddleware=require("./middleware/not-found");
 const errorHandlingMiddleware=require("./middleware/error-handler");
 const morgan=require("morgan");
@@ -24,6 +28,7 @@ app.get("/",(req,res,next)=>{
 
 app.use("/api/v1/auth",authRouter);
 app.use("/api/v1/users",userRoutes);
+app.use("/api/v1/products",productRoutes);
 
 app.use("/error-test", (req, res, next) => {
     // console.log(req);
