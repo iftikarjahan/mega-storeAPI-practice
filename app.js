@@ -1,6 +1,10 @@
 const express=require("express");
 require('express-async-errors');
 const app=express();
+const path=require("path");
+app.use(express.static(path.join(__dirname,"public")));
+const fileUpload=require("express-fileupload");
+app.use(fileUpload());
 const connectDb=require("./db/connect");
 require("dotenv").config();
 
@@ -14,6 +18,7 @@ const errorHandlingMiddleware=require("./middleware/error-handler");
 const morgan=require("morgan");
 const cookieParser = require("cookie-parser");
 const {CustomAPIError,UnauthenticatedError}=require("./errors");
+
 
 app.use(cookieParser(process.env.JWT_SECRET_KEY));    //for parsing the cookies from the request
 app.use(express.json())
