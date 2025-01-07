@@ -44,4 +44,5 @@ collection in such a way that querying becomes faster and the document follows c
 ReviewSchema.index({product:1,user:1},{unique:true});  //for validation
 
 
+
 module.exports=mongoose.Model("Review",ReviewSchema);
