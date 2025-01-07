@@ -19,3 +19,4 @@ const checkPermission = (requestUser, requestedResource) => {
 };
 
 module.exports = checkPermission;
+

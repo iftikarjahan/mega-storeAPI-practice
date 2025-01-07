@@ -2,11 +2,12 @@ const Review = require("../models/Review");
 const Product = require("../models/Product");
 const { NotFoundError, BadRequestError } = require("../errors");
 const { StatusCodes } = require("http-status-codes");
+const {checkPermission}=require("../utils");
 
 const createReview = async (req, res, next) => {
   const { product: productId } = req.body;
   // I need to check if the product really exists or not
-  const productExist =await Product.findById(productId);
+  const productExist = await Product.findById(productId);
   if (!productExist) {
     throw new NotFoundError(`No product exist with the id:${productId}`);
   }
@@ -25,20 +26,34 @@ const createReview = async (req, res, next) => {
   res.status(StatusCodes.OK).json({ review });
 };
 
-const getAllReviews = (req, res, next) => {
-  res.send("Get all reviews");
+const getAllReviews = async (req, res, next) => {
+  const reviews = await Review.find({});
+  res.status(StatusCodes.OK).json({ reviews, length: reviews.length });
 };
 
-const getSingleReview = (req, res, next) => {
-  res.send("Get Single Review");
+const getSingleReview =async (req, res, next) => {
+    const {id:reviewId}=req.params;
+    const review=await Review.findById(reviewId);
+    if(!review){
+        throw new NotFoundError(`No review exists with the id: ${reviewId}`);
+    }
+    res.status(StatusCodes.OK).json({review});
 };
 
 const updateReview = (req, res, next) => {
   res.send("Update Review");
 };
 
-const deleteReview = (req, res, next) => {
-  res.send("Delete Review");
+const deleteReview =async (req, res, next) => {
+  const {id:reviewId}=req.params;
+  const review=await Review.findById(reviewId);
+  if(!review){
+    throw new BadRequestError(`No review exists with the id: ${reviewId}`);
+  }
+  // If there is a review, you need to check if you have the permission to delete the review
+  checkPermission(req.user,review.user);
+  await review.deleteOne();
+  res.status(StatusCodes.OK).json({msg:"Review Deleted Successfully"});
 };
 
 module.exports = {
