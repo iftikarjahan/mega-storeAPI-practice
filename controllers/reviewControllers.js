@@ -40,8 +40,22 @@ const getSingleReview =async (req, res, next) => {
     res.status(StatusCodes.OK).json({review});
 };
 
-const updateReview = (req, res, next) => {
-  res.send("Update Review");
+const updateReview =async (req, res, next) => {
+  const {id:reviewId}=req.params;
+  const review=await Review.findById(reviewId);
+  if(!review){
+    throw new NotFoundError(`No review exist with the id: ${reviewId}`);
+  }
+  // If the review exist, you need to check for the permissions
+  checkPermission(req.user,review.user);
+  // now make the changes by extarcting the data from the req.body
+  const {rating,title,comment}=req.body;
+  review.rating=rating;
+  review.title=title;
+  review.comment=comment;
+  await review.save();
+
+  res.status(StatusCodes.OK).json({msg:"Review Updated",review});
 };
 
 const deleteReview =async (req, res, next) => {
