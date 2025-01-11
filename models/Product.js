@@ -65,6 +65,16 @@ const ProductSchema = new mongoose.Schema({
     ref:"User",
     required:true
   }
-},{timestamps:true});
+},{timestamps:true,toJSON:{virtuals:true},toObject:{virtuals:true}});
+// the last two options would ensure that whenever the data is converted to json or object, the virtual properties would also be included
+
+// defining a virtual property
+ProductSchema.virtual("reviews",{
+  ref: "Review",   //kis model ko reference kr rha hai
+  localField:"_id", //match this field in the product schema 
+  foreignField:"product",  //to this field in the review schema
+  justOne:false   //more that one review to be allowed
+})
 
 module.exports=mongoose.model("Product",ProductSchema);
+
