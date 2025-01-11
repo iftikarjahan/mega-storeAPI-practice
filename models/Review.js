@@ -43,6 +43,26 @@ collection in such a way that querying becomes faster and the document follows c
 */ 
 ReviewSchema.index({product:1,user:1},{unique:true});  //for validation
 
+/*
+->Static methods are used for model leve; methods that are not related to specific document
+instances
+->Called directly on the model
+*/ 
+ReviewSchema.statics.calculateAverageRating=async function(productId){
+    console.log(productId);
+}
 
+ReviewSchema.post("save",async function(){
+    await this.constructor.calculateAverageRating(this.product);
+    console.log("Inisde post save hook");
+})
+
+ReviewSchema.post("deleteOne",{ document: true, query: false },async function(){
+    console.log("Post delete hook called");
+})
+
+ReviewSchema.statics.calculateAverageRating=async function(productId){
+    console.log(productId);
+}
 
 module.exports=mongoose.model("Review",ReviewSchema);

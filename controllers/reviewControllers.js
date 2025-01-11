@@ -53,7 +53,7 @@ const updateReview =async (req, res, next) => {
   review.rating=rating;
   review.title=title;
   review.comment=comment;
-  await review.save();
+  await review.save();    //for doing all the schema validations
 
   res.status(StatusCodes.OK).json({msg:"Review Updated",review});
 };
