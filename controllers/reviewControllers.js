@@ -70,10 +70,20 @@ const deleteReview =async (req, res, next) => {
   res.status(StatusCodes.OK).json({msg:"Review Deleted Successfully"});
 };
 
+const getReviewsForSingleProduct=async (req,res,next)=>{
+  const {id:productId}=req.params;
+  const reviews=await Review.find({product:productId});
+  if(!reviews){
+    throw new NotFoundError("No reviews found for this product");
+  }
+  res.status(StatusCodes.OK).json(reviews);
+}
+
 module.exports = {
   createReview,
   getAllReviews,
   deleteReview,
   getSingleReview,
   updateReview,
+  getReviewsForSingleProduct   //I need to use this in the product routes
 };
