@@ -76,5 +76,11 @@ ProductSchema.virtual("reviews",{
   justOne:false   //more that one review to be allowed
 })
 
+ProductSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
+  // `this` refers to the product document being deleted
+  await this.model('Review').deleteMany({ product: this._id });
+  next();
+});
+
 module.exports=mongoose.model("Product",ProductSchema);
 
